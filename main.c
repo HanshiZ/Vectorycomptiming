@@ -7,11 +7,11 @@
 // Authored by Michael Crockatt
 // Modified by H. Metin Aktulga
 //-----------------------------------------------------------------------------
-
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-//#include <sys/time.h>
+#include <sys/time.h>
 #include <time.h>
 
 // Retrieves current time.
@@ -79,7 +79,11 @@ double vec_timeit (int repetitions, int N) {
 //-----------------------------------------------------------------------------
 // int main
 //-----------------------------------------------------------------------------
-int main () {
+int main (int argc, char * args[]) {
+
+  char fname[32] = {'\0'};
+  strncpy(fname, *args, 31);
+  strncat(fname, ".csv", 4);   
 
   int i, N, R, ops;
   double elapsed_time;
@@ -88,7 +92,8 @@ int main () {
   int num = 100;
 
   srand(time(NULL));
-
+  FILE * fp = fopen(fname,"w");
+  fputs("Length,reps,time,Gflops\n", fp);
   for ( i = 10; i <= num; ++i ) {
     N = (int)(pow( 10, 7.0/num * i )) / 16 * 16;
     if (N < 1) continue;
@@ -98,8 +103,10 @@ int main () {
     ops = 2 * N * R;
 
     elapsed_time = vec_timeit( R, N );
-
+    fprintf(fp, "%d,%d,%.3f,%.3f\n",
+	    N, R, elapsed_time, (double) ops / elapsed_time / 1e9 );
     printf( "%10d  %10d  %.3f  %.3f\n",
 	    N, R, elapsed_time, (double) ops / elapsed_time / 1e9 );
   }
+  fclose(fp);
 }
