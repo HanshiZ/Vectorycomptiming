@@ -109,4 +109,5 @@ int main (int argc, char * args[]) {
 	    N, R, elapsed_time, (double) ops / elapsed_time / 1e9 );
   }
   fclose(fp);
+  return 0;
 }
