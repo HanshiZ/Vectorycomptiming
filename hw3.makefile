@@ -1,3 +1,4 @@
+#change compiler and opt flags as neccesary
 opt := -O3
 CC := gcc
 project := hw3$(CC)$(opt)
